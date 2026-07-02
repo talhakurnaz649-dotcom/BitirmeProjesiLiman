@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="BitirmeProjesiLiman.Core/BitirmeProjesiLiman.Core.csproj" />
+  <Project Path="BitirmeProjesiLiman.Dapper.API/BitirmeProjesiLiman.Dapper.API.csproj" />
+  <Project Path="BitirmeProjesiLiman.Data.Dapper/BitirmeProjesiLiman.Data.Dapper.csproj" />
+  <Project Path="BitirmeProjesiLiman.Data.EF/BitirmeProjesiLiman.Data.EF.csproj" />
+  <Project Path="BitirmeProjesiLiman.EF.API/BitirmeProjesiLiman.EF.API.csproj" />
+  <Project Path="BitirmeProjesiLiman.Service/BitirmeProjesiLiman.Service.csproj" />
+</Solution>
