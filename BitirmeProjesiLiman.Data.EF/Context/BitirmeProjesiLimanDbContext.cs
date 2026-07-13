@@ -74,6 +74,36 @@ namespace BitirmeProjesiLiman.Data.EF.Context
                 new Cranes { Id = 1, Name = "Gantry-V1", Capacity = 65, Status = "Active" },
                 new Cranes { Id = 2, Name = "Gantry-V2", Capacity = 80, Status = "Active" }
             );
+
+            modelBuilder.Entity<BerthAllocations>().HasData(
+                new BerthAllocations { Id = 1, VesselId = 1, BerthId = 1, ArrivalDate = DateTime.Now.AddDays(-3), DepartureDate = DateTime.Now.AddDays(1), Status = "Docked" },
+                new BerthAllocations { Id = 2, VesselId = 2, BerthId = 2, ArrivalDate = DateTime.Now.AddDays(-1), DepartureDate = DateTime.Now.AddDays(3), Status = "Docked" }
+            );
+
+            modelBuilder.Entity<Containers>().HasData(
+                new Containers { Id = 1, ContainerNumber = "MSKU9081234", Size = "40ft", CargoType = "Dry", Weight = 24.5, Status = "InYard" },
+                new Containers { Id = 2, ContainerNumber = "MSC8872130", Size = "20ft", CargoType = "Reefer", TemperatureTarget = -18.0, Weight = 18.2, Status = "InYard" },
+                new Containers { Id = 3, ContainerNumber = "APLU3421098", Size = "40ft", CargoType = "Hazardous", Weight = 30.0, Status = "InYard" }
+            );
+
+            modelBuilder.Entity<ContainerPlacements>().HasData(
+                new ContainerPlacements { Id = 1, ContainerId = 1, Block = "A", Bay = 2, Row = 3, Tier = 1, PlacementDate = DateTime.Now.AddDays(-2) },
+                new ContainerPlacements { Id = 2, ContainerId = 2, Block = "B", Bay = 1, Row = 4, Tier = 2, PlacementDate = DateTime.Now.AddDays(-1) },
+                new ContainerPlacements { Id = 3, ContainerId = 3, Block = "C", Bay = 3, Row = 1, Tier = 1, PlacementDate = DateTime.Now.AddDays(-3) }
+            );
+
+            modelBuilder.Entity<GateReservations>().HasData(
+                new GateReservations { Id = 1, ContainerId = 1, TruckLicensePlate = "34 ABC 123", DriverName = "Ahmet Yurt", ScheduledTime = DateTime.Now.AddHours(2), Direction = "In", Status = "Approved" },
+                new GateReservations { Id = 2, ContainerId = 2, TruckLicensePlate = "06 XYZ 99", DriverName = "Mehmet Kaya", ScheduledTime = DateTime.Now.AddHours(6), Direction = "Out", Status = "Pending" }
+            );
+
+            modelBuilder.Entity<CustomsInspections>().HasData(
+                new CustomsInspections { Id = 1, ContainerId = 2, OfficerUserId = 3, Status = "Cleared", InspectionNotes = "Sıcaklık hedefleri normal, kargo içeriği temiz." }
+            );
+
+            modelBuilder.Entity<PortInvoices>().HasData(
+                new PortInvoices { Id = 1, VesselId = 1, BerthAllocationId = 1, TotalAmount = 24500, PaymentStatus = "Unpaid", InvoiceDate = DateTime.Now.AddDays(-1) }
+            );
         }
     }
 }
