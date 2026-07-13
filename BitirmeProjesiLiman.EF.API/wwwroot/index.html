@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liman Yönetim Paneli - PortMaster</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous" onerror="document.getElementById('error-message-detail').textContent += '\nTailwind CSS yüklenemedi. İnternet bağlantınızı kontrol edin.'; document.getElementById('fallback-error-console').style.display = 'block';"></script>
+    <!-- Tailwind CSS (Local) -->
+    <script src="/tailwind.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -21,13 +21,13 @@
             }
         }
     </script>
-    <!-- React & ReactDOM CDN -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin="anonymous" onerror="document.getElementById('error-message-detail').textContent += '\nReact yüklenemedi. İnternet bağlantınızı kontrol edin.'; document.getElementById('fallback-error-console').style.display = 'block';"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin="anonymous" onerror="document.getElementById('error-message-detail').textContent += '\nReactDOM yüklenemedi. İnternet bağlantınızı kontrol edin.'; document.getElementById('fallback-error-console').style.display = 'block';"></script>
-    <!-- Babel CDN -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin="anonymous" onerror="document.getElementById('error-message-detail').textContent += '\nBabel (JS Derleyici) yüklenemedi. İnternet bağlantınızı kontrol edin.'; document.getElementById('fallback-error-console').style.display = 'block';"></script>
-    <!-- Marked.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" crossorigin="anonymous" onerror="document.getElementById('error-message-detail').textContent += '\nMarked.js (Markdown) yüklenemedi. İnternet bağlantınızı kontrol edin.'; document.getElementById('fallback-error-console').style.display = 'block';"></script>
+    <!-- React & ReactDOM (Local) -->
+    <script src="/react.js"></script>
+    <script src="/react-dom.js"></script>
+    <!-- Babel (Local) -->
+    <script src="/babel.js"></script>
+    <!-- Marked.js (Local) -->
+    <script src="/marked.js"></script>
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
