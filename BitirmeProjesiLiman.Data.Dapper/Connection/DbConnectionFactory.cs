@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace BitirmeProjesiLiman.Data.Dapper.Connection
 {
-    internal class DbConnectionFactory
+    public class DbConnectionFactory
     {
+        private readonly string _connectionString;
+
+        public DbConnectionFactory(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public IDbConnection CreateConnection()
+        {
+            return new SqliteConnection(_connectionString);
+        }
     }
 }

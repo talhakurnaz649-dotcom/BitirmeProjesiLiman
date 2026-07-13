@@ -14,6 +14,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BitirmeProjesiLiman.Core\BitirmeProjesiLiman.Core.csproj" />
+    <ProjectReference Include="..\BitirmeProjesiLiman.Service\BitirmeProjesiLiman.Service.csproj" />
+    <ProjectReference Include="..\BitirmeProjesiLiman.Data.EF\BitirmeProjesiLiman.Data.EF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

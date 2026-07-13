@@ -1,12 +1,12 @@
-﻿using System;
+using BitirmeProjesiLiman.Core.DTOs;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BitirmeProjesiLiman.Data.Dapper.Repositories
 {
-    internal class IDashboardRepository
+    public interface IDashboardRepository
     {
+        Task<YardOccupancyDto> GetYardOccupancyAsync();
+        Task<IEnumerable<SonGemiHareketleriDto>> GetRecentVesselMovementsAsync();
     }
 }

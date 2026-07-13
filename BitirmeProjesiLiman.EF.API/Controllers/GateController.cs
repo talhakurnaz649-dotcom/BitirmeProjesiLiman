@@ -1,99 +1,95 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Concurrent;
 using BitirmeProjesiLiman.Core.Entities;
+using BitirmeProjesiLiman.Core.Repositories;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BitirmeProjesiLiman.EF.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class GateController : ControllerBase
     {
-        private static readonly ConcurrentDictionary<int, GateReservations> Reservations = new();
-        private static int _nextId = 3;
+        private readonly IUnitOfWork _unitOfWork;
 
-        static GateController()
+        public GateController(IUnitOfWork unitOfWork)
         {
-            Reservations[1] = new GateReservations
-            {
-                Id = 1,
-                ContainerId = 1,
-                TruckLicensePlate = "34 ABC 123",
-                DriverName = "Ahmet Yurt",
-                ScheduledTime = DateTime.Parse("2026-07-06T16:00:00"),
-                Direction = "In",
-                Status = "Approved"
-            };
-
-            Reservations[2] = new GateReservations
-            {
-                Id = 2,
-                ContainerId = 2,
-                TruckLicensePlate = "06 XYZ 99",
-                DriverName = "Mehmet Kaya",
-                ScheduledTime = DateTime.Parse("2026-07-06T18:30:00"),
-                Direction = "Out",
-                Status = "Pending"
-            };
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(Reservations.Values.OrderBy(r => r.Id));
+            var reservations = await _unitOfWork.Repository<GateReservations>().GetAllAsync();
+            return Ok(reservations.OrderBy(r => r.Id));
         }
 
         [HttpPost("reservation")]
-        public IActionResult Create([FromBody] GateReservations reservation)
+        public async Task<IActionResult> CreateReservation([FromBody] GateReservations reservation)
         {
-            if (reservation == null)
+            if (reservation.ScheduledTime == default)
             {
-                return BadRequest();
+                reservation.ScheduledTime = DateTime.UtcNow.AddHours(24);
             }
-
-            int id = Interlocked.Increment(ref _nextId) - 1;
-            reservation.Id = id;
             if (string.IsNullOrEmpty(reservation.Status))
             {
                 reservation.Status = "Pending";
             }
-            
-            Reservations[id] = reservation;
-            return Ok(reservation);
+
+            await _unitOfWork.Repository<GateReservations>().AddAsync(reservation);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(new { Message = "Tır randevusu başarıyla oluşturuldu.", ReservationId = reservation.Id, reservation });
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] GateReservations reservation)
+        public async Task<IActionResult> Update(int id, [FromBody] GateReservations reservation)
         {
-            if (reservation == null || !Reservations.ContainsKey(id))
-            {
-                return NotFound();
-            }
+            var existing = await _unitOfWork.Repository<GateReservations>().GetByIdAsync(id);
+            if (existing == null)
+                return NotFound("Randevu bulunamadı.");
 
-            reservation.Id = id;
-            Reservations[id] = reservation;
-            return Ok(reservation);
+            existing.TruckLicensePlate = reservation.TruckLicensePlate;
+            existing.DriverName = reservation.DriverName;
+            existing.ScheduledTime = reservation.ScheduledTime;
+            existing.Direction = reservation.Direction;
+            existing.Status = reservation.Status;
+
+            _unitOfWork.Repository<GateReservations>().Update(existing);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(existing);
         }
 
         [HttpPut("approve/{id}")]
-        public IActionResult Approve(int id)
+        [Authorize(Roles = "Admin,Operator")] // Sadece Admin ve Operatör onaylayabilir
+        public async Task<IActionResult> ApproveReservation(int id)
         {
-            if (!Reservations.TryGetValue(id, out var reservation))
-            {
-                return NotFound();
-            }
+            var reservation = await _unitOfWork.Repository<GateReservations>().GetByIdAsync(id);
+            if (reservation == null)
+                return NotFound("Randevu bulunamadı.");
 
             reservation.Status = "Approved";
-            return Ok(reservation);
+            _unitOfWork.Repository<GateReservations>().Update(reservation);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(new { Message = "Randevu onaylandı. Tır limana giriş yapabilir.", reservation });
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (Reservations.TryRemove(id, out var reservation))
-            {
-                return Ok(reservation);
-            }
-            return NotFound();
+            var reservation = await _unitOfWork.Repository<GateReservations>().GetByIdAsync(id);
+            if (reservation == null)
+                return NotFound("Randevu bulunamadı.");
+
+            _unitOfWork.Repository<GateReservations>().Delete(reservation);
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
