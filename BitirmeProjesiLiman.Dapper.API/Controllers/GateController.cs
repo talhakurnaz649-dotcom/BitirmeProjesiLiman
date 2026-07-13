@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using BitirmeProjesiLiman.Core.Entities;
 
-namespace BitirmeProjesiLiman.EF.API.Controllers
+namespace BitirmeProjesiLiman.Dapper.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

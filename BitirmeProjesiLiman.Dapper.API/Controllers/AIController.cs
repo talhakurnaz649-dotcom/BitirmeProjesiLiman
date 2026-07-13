@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using BitirmeProjesiLiman.Core.DTOs;
 
-namespace BitirmeProjesiLiman.EF.API.Controllers
+namespace BitirmeProjesiLiman.Dapper.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
